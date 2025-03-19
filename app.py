@@ -1,6 +1,6 @@
 import os
 os.environ["HF_TOKEN"]="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"
-from utils import WebScrapper, preprocess_text, parse_post
+from utils import WebScrapper, preprocess_text, parse_filtered_text
 from vllm import LLM
 from vllm.sampling_params import SamplingParams
 import inferless
