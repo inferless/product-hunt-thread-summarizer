@@ -73,7 +73,7 @@ def preprocess_text(raw_text):
         
     return posts
 
-def parse_post(post_lines):
+def parse_filtered_text(post_lines):
     author = None
     if "by" in post_lines:
         try:
