@@ -19,11 +19,11 @@ class WebScrapper:
         self.driver = webdriver.Chrome(options=chrome_options)
 
     def extract_content(self,url):
-        print(f"Navigating to {url}")
+        # print(f"Navigating to {url}")
         self.driver.get(url)
         
         # Wait for the page to load completely
-        print("Waiting for page to load...")
+        # print("Waiting for page to load...")
         wait = WebDriverWait(self.driver, 30)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "h1")))
         
@@ -35,16 +35,16 @@ class WebScrapper:
         
         # Extract the title
         title = self.driver.title
-        print("\n" + "="*50)
-        print(f"TITLE: {title}")
-        print("="*50)
+        # print("\n" + "="*50)
+        # print(f"TITLE: {title}")
+        # print("="*50)
 
-        print("No comments could be extracted from the page.")
-        # Try a last resort approach - get all text from the page
-        print("\nLAST RESORT - EXTRACTING ALL TEXT FROM PAGE:")
-        print("-"*50)
+        # print("No comments could be extracted from the page.")
+        # # Try a last resort approach - get all text from the page
+        # print("\nLAST RESORT - EXTRACTING ALL TEXT FROM PAGE:")
+        # print("-"*50)
         body_text = self.driver.find_element(By.TAG_NAME, "body").text
-        print(body_text[:1000] + "..." if len(body_text) > 1000 else body_text)
+        # print(body_text[:1000] + "..." if len(body_text) > 1000 else body_text)
     
         return body_text
 
