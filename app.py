@@ -123,3 +123,4 @@ class InferlessPythonModel:
 
     def finalize(self):
         self.llm = None
+        self.web_scrap_obj.clear_driver()
