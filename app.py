@@ -1,6 +1,6 @@
 import os
 os.environ["HF_TOKEN"]="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"
-from utils import WebScrapper, preprocess_text, parse_filtered_text
+from utils import WebScraper, preprocess_text, parse_filtered_text
 from vllm import LLM
 from vllm.sampling_params import SamplingParams
 import inferless
@@ -26,7 +26,7 @@ class InferlessPythonModel:
     def initialize(self):
         model_id = "mistralai/Mistral-Small-24B-Instruct-2501"
         self.llm = LLM(model=model_id, tokenizer_mode="mistral")
-        self.web_scrap_obj = WebScrapper()
+        self.web_scrap_obj = WebScraper()
 
     def infer(self, request: RequestObjects) -> ResponseObjects:
         raw_text = self.web_scrap_obj.extract_content(request.url)
@@ -116,11 +116,9 @@ class InferlessPythonModel:
                                          repetition_penalty=request.repetition_penalty,
                                          top_k=request.top_k,max_tokens=request.max_tokens,seed=request.seed)
         outputs = llm.chat(messages, sampling_params=sampling_params)
-        generateObject = ResponseObjects(generated_result = outputs[0].outputs[0].text)
-        
+        generateObject = ResponseObjects(generated_result = outputs[0].outputs[0].text)        
         return generateObject
-
 
     def finalize(self):
         self.llm = None
-        self.web_scrap_obj.clear_driver()
+        self.web_scrap_obj.clear_session()
