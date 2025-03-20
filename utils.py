@@ -6,7 +6,6 @@ import time
 
 class WebScraper:
     def __init__(self):
-        # Set up a session with headers to mimic a browser
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -16,8 +15,8 @@ class WebScraper:
     
     def extract_content(self, url):
         try:
-            response = self.session.get(url, timeout=30)
-            response.raise_for_status()  # Raise an exception for HTTP errors
+            response = self.session.get(url, timeout=100)
+            response.raise_for_status()
             soup = BeautifulSoup(response.text, 'html.parser')
             title = soup.title.string if soup.title else "No title found"
             body_text = soup.body.get_text(separator='\n', strip=True) if soup.body else ""
