@@ -22,14 +22,17 @@ This will create a copy of the repository in your own GitHub account, allowing y
 ### Create a Custom Runtime in Inferless
 To access the custom runtime window in Inferless, simply navigate to the sidebar and click on the Create new Runtime button. A pop-up will appear.
 
-Next, provide a suitable name for your custom runtime and proceed by uploading the inferless-runtime-config.yaml file given above. Finally, ensure you save your changes by clicking on the save button.
+Next, provide a suitable name for your custom runtime and proceed by uploading the **inferless-runtime-config.yaml** file given above. Finally, ensure you save your changes by clicking on the save button.
 
 ### Import the Model in Inferless
-Log in to your inferless account, select the workspace you want the model to be imported into and click on the `Deploy a Model` button and then click `Deploy your custom model`.
+Log in to your inferless account, select the workspace you want the model to be imported into and click the `Deploy a Model` button.
 
-Select the GitHub as provider and then choose your GitHub repository.
+- Select `Github` as the method of upload from the Provider list and then select your Github Repository and the branch.
+- Choose the type of machine, and specify the minimum and maximum number of replicas for deploying your model.
+- Configure Custom Runtime ( If you have pip or apt packages), choose Volume, Secrets and set Environment variables like Inference Timeout / Container Concurrency / Scale Down Timeout
+- Once you click “Continue,” click Deploy to start the model import process.
 
-Enter all the required details to Import your model. Refer [this link](https://docs.inferless.com/integrations/github-custom-code) for more information on model import.
+Enter all the required details to Import your model. Refer [this link](https://docs.inferless.com/integrations/git-custom-code/git--custom-code) for more information on model import.
 
 ---
 ## Curl Command
