@@ -1,35 +1,39 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-import json
-import time
+import requests
+from requests.adapters import HTTPAdapter, Retry
 
 class WebScraper:
     def __init__(self):
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                          '(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
         })
-    
+        retries = Retry(total=5,backoff_factor=1)
+        adapter = HTTPAdapter(max_retries=retries)
+        self.session.mount('http://', adapter)
+        self.session.mount('https://', adapter)
+
     def extract_content(self, url):
         try:
             response = self.session.get(url, timeout=100)
             response.raise_for_status()
             soup = BeautifulSoup(response.text, 'html.parser')
+
             title = soup.title.string if soup.title else "No title found"
             body_text = soup.body.get_text(separator='\n', strip=True) if soup.body else ""
-            
             return body_text
-            
+
         except requests.exceptions.RequestException as e:
             print(f"Error fetching URL: {e}")
             return None
-    
-    def clear_session(self):
-        self.session.close()
 
+    def clear_session(self):
+        self.session.close()        
 
 def preprocess_text(raw_text):
     lines = [line.strip() for line in raw_text.splitlines() if line.strip()]
