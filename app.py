@@ -1,5 +1,3 @@
-import os
-os.environ["HF_TOKEN"]="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"
 from utils import WebScraper, preprocess_text, parse_filtered_text
 from vllm import LLM
 from vllm.sampling_params import SamplingParams
@@ -25,7 +23,7 @@ class ResponseObjects(BaseModel):
 class InferlessPythonModel:
     def initialize(self):
         model_id = "mistralai/Mistral-Small-24B-Instruct-2501"
-        self.llm = LLM(model=model_id, tokenizer_mode="mistral")
+        self.llm = LLM(model=model_id)
         self.web_scrap_obj = WebScraper()
 
     def infer(self, request: RequestObjects) -> ResponseObjects:
