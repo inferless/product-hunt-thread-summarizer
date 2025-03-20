@@ -1,55 +1,35 @@
-import time
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import requests
+from bs4 import BeautifulSoup
 import re
 import json
+import time
 
-class WebScrapper:
+class WebScraper:
     def __init__(self):
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-gpu")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--window-size=1920,1080")
+        # Set up a session with headers to mimic a browser
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+        })
     
-        self.driver = webdriver.Chrome(options=chrome_options)
-
-    def extract_content(self,url):
-        # print(f"Navigating to {url}")
-        self.driver.get(url)
-        
-        # Wait for the page to load completely
-        # print("Waiting for page to load...")
-        wait = WebDriverWait(self.driver, 30)
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "h1")))
-        
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(1)
-        
-        # Additional wait for dynamic content to load
-        # time.sleep(5)
-        
-        # Extract the title
-        title = self.driver.title
-        # print("\n" + "="*50)
-        # print(f"TITLE: {title}")
-        # print("="*50)
-
-        # print("No comments could be extracted from the page.")
-        # # Try a last resort approach - get all text from the page
-        # print("\nLAST RESORT - EXTRACTING ALL TEXT FROM PAGE:")
-        # print("-"*50)
-        body_text = self.driver.find_element(By.TAG_NAME, "body").text
-        # print(body_text[:1000] + "..." if len(body_text) > 1000 else body_text)
+    def extract_content(self, url):
+        try:
+            response = self.session.get(url, timeout=30)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            soup = BeautifulSoup(response.text, 'html.parser')
+            title = soup.title.string if soup.title else "No title found"
+            body_text = soup.body.get_text(separator='\n', strip=True) if soup.body else ""
+            
+            return body_text
+            
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching URL: {e}")
+            return None
     
-        return body_text
-
-    def clear_driver(self):
-        self.driver.quit()
+    def clear_session(self):
+        self.session.close()
 
 
 def preprocess_text(raw_text):
