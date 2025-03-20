@@ -110,7 +110,7 @@ class InferlessPythonModel:
         sampling_params = SamplingParams(temperature=request.temperature,top_p=request.top_p,
                                          repetition_penalty=request.repetition_penalty,
                                          top_k=request.top_k,max_tokens=request.max_tokens,seed=request.seed)
-        outputs = llm.chat(messages, sampling_params=sampling_params)
+        outputs = self.llm.chat(messages, sampling_params=sampling_params)
         generateObject = ResponseObjects(generated_result = outputs[0].outputs[0].text)        
         return generateObject
 
